@@ -11,26 +11,21 @@ jobs:
   update:
     runs-on: ubuntu-latest
     steps:
-      - name: Update Flatlus Fred
+      - name: Update all players
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            "https://api.wiseoldman.net/v2/players/Flatlus%20Fred")
-          echo "Flatlus Fred → HTTP $STATUS"
+          update_player() {
+            local name="$1"
+            local encoded="$2"
+            BODY=$(curl -s -w "\nHTTP_%{http_code}" -X POST \
+              "https://api.wiseoldman.net/v2/players/${encoded}" \
+              -H "Content-Type: application/json" \
+              -H "User-Agent: osrs-group-tracker/1.0")
+            STATUS=$(echo "$BODY" | tail -1 | sed 's/HTTP_//')
+            RESP=$(echo "$BODY" | head -1)
+            echo "[$name] HTTP $STATUS — $RESP"
+          }
 
-      - name: Update Gonore Geir
-        run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            "https://api.wiseoldman.net/v2/players/Gonore%20Geir")
-          echo "Gonore Geir → HTTP $STATUS"
-
-      - name: Update Skabb Svein
-        run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            "https://api.wiseoldman.net/v2/players/Skabb%20Svein")
-          echo "Skabb Svein → HTTP $STATUS"
-
-      - name: Update Kreft Kari
-        run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            "https://api.wiseoldman.net/v2/players/Kreft%20Kari")
-          echo "Kreft Kari → HTTP $STATUS"
+          update_player "Flatlus Fred"  "Flatlus%20Fred"
+          update_player "Gonore Geir"   "Gonore%20Geir"
+          update_player "Skabb Svein"   "Skabb%20Svein"
+          update_player "Kreft Kari"    "Kreft%20Kari"
