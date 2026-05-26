@@ -36,7 +36,7 @@ export interface Snapshot {
 
 export async function fetchPlayerSnapshots(username: string): Promise<Snapshot[]> {
   const res = await fetch(
-    `${WOM_API}/players/${encodeURIComponent(username)}/snapshots?period=month`,
+    `${WOM_API}/players/${encodeURIComponent(username)}/snapshots`,
   );
   if (!res.ok) {
     const msg =
