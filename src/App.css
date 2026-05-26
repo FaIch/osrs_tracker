@@ -250,50 +250,73 @@
 .kill-value { color: var(--boss); }
 .act-value  { color: var(--clue); }
 
-/* ── Skill box grid ───────────────────────────────────── */
-.skills-box-grid {
+/* ── Player stats columns ─────────────────────────────── */
+.player-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
   margin-top: 8px;
 }
 
-.skill-box {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 5px 4px;
-  background: var(--panel);
+.stats-column {
+  background: #1e1509;
   border: 1px solid var(--border-lo);
-  text-align: center;
+  padding: 6px 8px;
 }
 
-.skill-box--active {
-  border-color: var(--border-hi);
-  background: var(--panel-hover);
+.stats-column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid var(--border-lo);
 }
 
-.skill-box-icon {
-  width: 22px;
-  height: 22px;
+.stats-column-title {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+}
+
+.stats-column-total {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  font-size: 0.85rem;
+}
+
+.stat-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
   image-rendering: pixelated;
 }
 
-.skill-box-name {
-  font-size: 0.65rem;
-  color: var(--text-dim);
+.stat-name {
+  flex: 1;
+  color: var(--text);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.skill-box-xp {
-  font-size: 0.7rem;
-  color: var(--text-dim);
-}
-
-.skill-box-xp--active {
-  color: var(--xp);
+.stat-value {
   font-weight: bold;
+  flex-shrink: 0;
+}
+
+.stats-empty {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-style: italic;
 }
 
 /* ── Responsive ───────────────────────────────────────── */

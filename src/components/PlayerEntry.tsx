@@ -1,60 +1,90 @@
-import type { PlayerDayEntry, BossKill, ActivityGain } from '../utils/diary';
+import type { PlayerDayEntry, BossKill, ActivityGain, SkillGain } from '../utils/diary';
 import { formatXP, prettify } from '../utils/format';
-import { SkillBox, SKILLS_ORDER } from './SkillBox';
 
-function MetricIcon({ type, metric }: { type: 'bosses' | 'activities'; metric: string }) {
-  return (
-    <img
-      src={`${import.meta.env.BASE_URL}icons/${type}/${metric}.png`}
-      alt=""
-      aria-hidden="true"
-      className="metric-icon"
-      onError={(e) => {
-        (e.currentTarget as HTMLImageElement).style.visibility = 'hidden';
-      }}
-    />
-  );
-}
-
-function LocalSkillIcon({ metric }: { metric: string }) {
+function SkillIcon({ metric }: { metric: string }) {
   return (
     <img
       src={`${import.meta.env.BASE_URL}icons/skills/${metric}.png`}
       alt=""
       aria-hidden="true"
-      className="metric-icon"
-      onError={(e) => {
-        (e.currentTarget as HTMLImageElement).style.visibility = 'hidden';
-      }}
+      className="stat-icon"
+      onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'; }}
     />
   );
 }
 
-function BossesTable({ bosses }: { bosses: BossKill[] }) {
+function BossIcon({ metric }: { metric: string }) {
   return (
-    <div className="gains-section">
-      <div className="section-label">Boss Kills</div>
-      <div className="gains-grid">
-        {bosses.map((b) => (
-          <div key={b.metric} className="gain-row">
-            <MetricIcon type="bosses" metric={b.metric} />
-            <span className="metric-name">{prettify(b.metric)}</span>
-            <span className="gain-value kill-value">×{b.killsGained}</span>
-          </div>
-        ))}
+    <img
+      src={`${import.meta.env.BASE_URL}icons/bosses/${metric}.png`}
+      alt=""
+      aria-hidden="true"
+      className="stat-icon"
+      onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'; }}
+    />
+  );
+}
+
+function SkillsColumn({ skills, total }: { skills: SkillGain[]; total: number }) {
+  return (
+    <div className="stats-column">
+      <div className="stats-column-header">
+        <span className="stats-column-title">Skills</span>
+        <span className="stats-column-total xp-value">+{formatXP(total)} XP</span>
       </div>
+      {skills.length === 0 ? (
+        <span className="stats-empty">No gains</span>
+      ) : (
+        skills.map((s) => (
+          <div key={s.metric} className="stat-item">
+            <SkillIcon metric={s.metric} />
+            <span className="stat-name">{prettify(s.metric)}</span>
+            <span className="stat-value xp-value">+{formatXP(s.xpGained)}</span>
+          </div>
+        ))
+      )}
     </div>
   );
 }
 
-function ActivitiesTable({ activities }: { activities: ActivityGain[] }) {
+function BossesColumn({ bosses }: { bosses: BossKill[] }) {
+  const total = bosses.reduce((s, b) => s + b.killsGained, 0);
+  return (
+    <div className="stats-column">
+      <div className="stats-column-header">
+        <span className="stats-column-title">Bosses</span>
+        <span className="stats-column-total kill-value">{total} kills</span>
+      </div>
+      {bosses.length === 0 ? (
+        <span className="stats-empty">No kills</span>
+      ) : (
+        bosses.map((b) => (
+          <div key={b.metric} className="stat-item">
+            <BossIcon metric={b.metric} />
+            <span className="stat-name">{prettify(b.metric)}</span>
+            <span className="stat-value kill-value">×{b.killsGained}</span>
+          </div>
+        ))
+      )}
+    </div>
+  );
+}
+
+function ActivitiesRow({ activities }: { activities: ActivityGain[] }) {
+  if (activities.length === 0) return null;
   return (
     <div className="gains-section">
       <div className="section-label">Activities</div>
       <div className="gains-grid">
         {activities.map((a) => (
           <div key={a.metric} className="gain-row">
-            <MetricIcon type="activities" metric={a.metric} />
+            <img
+              src={`${import.meta.env.BASE_URL}icons/activities/${a.metric}.png`}
+              alt=""
+              aria-hidden="true"
+              className="metric-icon"
+              onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'; }}
+            />
             <span className="metric-name">{prettify(a.metric)}</span>
             <span className="gain-value act-value">+{a.scoreGained}</span>
           </div>
@@ -65,8 +95,6 @@ function ActivitiesTable({ activities }: { activities: ActivityGain[] }) {
 }
 
 export function PlayerEntry({ entry }: { entry: PlayerDayEntry }) {
-  const skillGainMap = new Map(entry.skills.map((s) => [s.metric, s.xpGained]));
-
   return (
     <div className="player-entry">
       <div className="player-entry-header">
@@ -80,21 +108,19 @@ export function PlayerEntry({ entry }: { entry: PlayerDayEntry }) {
         <div className="level-ups">
           {entry.levelUps.map((lu) => (
             <span key={lu.metric} className="level-up-badge">
-              <LocalSkillIcon metric={lu.metric} />
+              <SkillIcon metric={lu.metric} />
               {prettify(lu.metric)} {lu.from}→{lu.to}
             </span>
           ))}
         </div>
       )}
 
-      <div className="skills-box-grid">
-        {SKILLS_ORDER.map((metric) => (
-          <SkillBox key={metric} metric={metric} xpGained={skillGainMap.get(metric) ?? 0} />
-        ))}
+      <div className="player-stats">
+        <SkillsColumn skills={entry.skills} total={entry.totalXpGained} />
+        <BossesColumn bosses={entry.bosses} />
       </div>
 
-      {entry.bosses.length > 0 && <BossesTable bosses={entry.bosses} />}
-      {entry.activities.length > 0 && <ActivitiesTable activities={entry.activities} />}
+      <ActivitiesRow activities={entry.activities} />
     </div>
   );
 }
