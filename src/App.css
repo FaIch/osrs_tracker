@@ -1,0 +1,246 @@
+/* ── Layout ──────────────────────────────────────────── */
+.app {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* ── Header ──────────────────────────────────────────── */
+.app-header {
+  text-align: center;
+  padding: 28px 16px 20px;
+  border-bottom: 2px solid var(--border-hi);
+  margin-bottom: 20px;
+}
+
+.app-title {
+  font-family: 'VT323', 'Trebuchet MS', monospace;
+  font-size: 3.2rem;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #000;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+.group-members {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.member-tag {
+  background: var(--panel);
+  border: 1px solid;
+  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  color: var(--gold-bright);
+  padding: 2px 12px;
+  font-size: 0.85rem;
+}
+
+/* ── Status boxes ─────────────────────────────────────── */
+.status-box {
+  border: 2px solid;
+  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  background: var(--panel);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.status-box.loading {
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.status-box.warning {
+  color: var(--error);
+  border-color: var(--error);
+  text-align: left;
+}
+
+.status-box.warning p + p {
+  margin-top: 6px;
+}
+
+.status-box.empty {
+  color: var(--text-dim);
+}
+
+/* ── Diary entry card ─────────────────────────────────── */
+.diary-entry {
+  background: var(--panel);
+  border: 2px solid;
+  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  margin-bottom: 10px;
+}
+
+.diary-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+}
+
+.diary-entry-header:hover,
+.diary-entry-header:focus-visible {
+  background: var(--panel-hover);
+  outline: none;
+}
+
+.diary-date {
+  flex: 1;
+  font-family: 'VT323', monospace;
+  font-size: 1.35rem;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+.diary-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.summary-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 44px;
+  font-size: 0.82rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.stat-label {
+  color: var(--text-dim);
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: normal;
+}
+
+.xp-stat { color: var(--xp); }
+.boss-stat { color: var(--boss); }
+.level-stat { color: var(--level); }
+.clue-stat { color: var(--clue); }
+
+.expand-icon {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  min-width: 14px;
+  text-align: right;
+}
+
+/* ── Player sections ──────────────────────────────────── */
+.diary-players {
+  border-top: 1px solid var(--border-lo);
+}
+
+.player-entry {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-lo);
+}
+
+.player-entry:last-child {
+  border-bottom: none;
+}
+
+.player-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.player-name {
+  color: var(--gold-bright);
+  font-weight: bold;
+}
+
+.xp-total {
+  color: var(--xp);
+  font-size: 0.88rem;
+}
+
+/* ── Level-up badges ──────────────────────────────────── */
+.level-ups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.level-up-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #2a2000;
+  border: 1px solid var(--level);
+  color: var(--level);
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* ── Gains grid ───────────────────────────────────────── */
+.gains-section {
+  margin-top: 8px;
+}
+
+.section-label {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.gains-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 2px;
+}
+
+.gain-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 4px;
+  font-size: 0.85rem;
+}
+
+.metric-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.metric-name {
+  flex: 1;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gain-value {
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.xp-value  { color: var(--xp); }
+.kill-value { color: var(--boss); }
+.act-value  { color: var(--clue); }
+
+/* ── Responsive ───────────────────────────────────────── */
+@media (max-width: 600px) {
+  .app-title { font-size: 2.2rem; }
+  .diary-date { font-size: 1.1rem; }
+  .gains-grid { grid-template-columns: 1fr 1fr; }
+  .diary-summary { gap: 6px; }
+}

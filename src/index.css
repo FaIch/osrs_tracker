@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0a0908;
+  --panel: #2d2012;
+  --panel-hover: #38281a;
+  --border-hi: #5c4a30;
+  --border-lo: #1a1208;
+  --gold: #ff981f;
+  --gold-bright: #ffd080;
+  --text: #c8c8c0;
+  --text-dim: #7a7265;
+  --xp: #a0e88a;
+  --level: #ffff00;
+  --boss: #e87c5a;
+  --clue: #80c8ff;
+  --error: #ff5555;
+}
+
+html,
+body {
+  min-height: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+#root {
+  min-height: 100vh;
+}

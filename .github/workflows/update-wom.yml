@@ -1,0 +1,36 @@
+name: Update WOM Snapshots
+
+# Runs at 23:30 UTC daily to capture end-of-day progress.
+# Can also be triggered manually via Actions tab.
+on:
+  schedule:
+    - cron: '30 23 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update Flatlus Fred
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            "https://api.wiseoldman.net/v2/players/Flatlus%20Fred")
+          echo "Flatlus Fred → HTTP $STATUS"
+
+      - name: Update Gonore Geir
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            "https://api.wiseoldman.net/v2/players/Gonore%20Geir")
+          echo "Gonore Geir → HTTP $STATUS"
+
+      - name: Update Skabb Svein
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            "https://api.wiseoldman.net/v2/players/Skabb%20Svein")
+          echo "Skabb Svein → HTTP $STATUS"
+
+      - name: Update Kreft Kari
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            "https://api.wiseoldman.net/v2/players/Kreft%20Kari")
+          echo "Kreft Kari → HTTP $STATUS"
