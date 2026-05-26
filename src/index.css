@@ -37,4 +37,97 @@ body {
 
 #root {
   min-height: 100vh;
+  position: relative;
+  isolation: isolate;
+}
+
+#root::before,
+#root::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+#root::before {
+  background:
+    radial-gradient(ellipse 70% 55% at 15% 20%, rgba(255, 140, 20, 0.13) 0%, transparent 100%),
+    radial-gradient(ellipse 60% 65% at 80% 78%, rgba(180, 70, 10, 0.10) 0%, transparent 100%);
+  filter: blur(72px);
+  will-change: transform;
+  animation: bgOrb1 22s ease-in-out infinite alternate;
+}
+
+#root::after {
+  background:
+    radial-gradient(ellipse 55% 50% at 72% 28%, rgba(210, 110, 0, 0.11) 0%, transparent 100%),
+    radial-gradient(ellipse 50% 60% at 28% 82%, rgba(255, 170, 40, 0.09) 0%, transparent 100%);
+  filter: blur(96px);
+  will-change: transform;
+  animation: bgOrb2 28s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes bgOrb1 {
+  0%   { transform: translate(0,   0);   }
+  33%  { transform: translate(9%,  -6%); }
+  66%  { transform: translate(-6%,  9%); }
+  100% { transform: translate(5%,   7%); }
+}
+
+@keyframes bgOrb2 {
+  0%   { transform: translate(0,    0);   }
+  33%  { transform: translate(-7%,  5%);  }
+  66%  { transform: translate(8%,  -7%);  }
+  100% { transform: translate(-4%, -5%);  }
+}
+
+/* ── Smoke ───────────────────────────────────────────── */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+body::before {
+  height: 38vh;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 22% 70% at  8% 100%, rgba(200, 175, 140, 0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 18% 60% at 24% 100%, rgba(190, 165, 130, 0.05) 0%, transparent 100%),
+    radial-gradient(ellipse 24% 75% at 42% 100%, rgba(200, 175, 140, 0.06) 0%, transparent 100%),
+    radial-gradient(ellipse 18% 62% at 60% 100%, rgba(190, 165, 130, 0.05) 0%, transparent 100%),
+    radial-gradient(ellipse 22% 70% at 78% 100%, rgba(200, 175, 140, 0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 16% 55% at 93% 100%, rgba(190, 165, 130, 0.04) 0%, transparent 100%);
+  filter: blur(28px);
+  animation: smoke1 14s ease-in-out infinite alternate;
+}
+
+body::after {
+  height: 26vh;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 20% 65% at 16% 100%, rgba(195, 170, 135, 0.06) 0%, transparent 100%),
+    radial-gradient(ellipse 24% 72% at 34% 100%, rgba(205, 180, 145, 0.05) 0%, transparent 100%),
+    radial-gradient(ellipse 18% 60% at 52% 100%, rgba(195, 170, 135, 0.06) 0%, transparent 100%),
+    radial-gradient(ellipse 22% 68% at 70% 100%, rgba(205, 180, 145, 0.05) 0%, transparent 100%),
+    radial-gradient(ellipse 17% 58% at 87% 100%, rgba(195, 170, 135, 0.04) 0%, transparent 100%);
+  filter: blur(40px);
+  animation: smoke2 19s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes smoke1 {
+  0%   { transform: translateY(0)    scaleX(1);    opacity: 0.8; }
+  40%  { transform: translateY(-8%)  scaleX(1.06); opacity: 1;   }
+  100% { transform: translateY(-16%) scaleX(0.96); opacity: 0.7; }
+}
+
+@keyframes smoke2 {
+  0%   { transform: translateY(0)    scaleX(1);    opacity: 0.7; }
+  50%  { transform: translateY(-10%) scaleX(1.08); opacity: 1;   }
+  100% { transform: translateY(-6%)  scaleX(0.94); opacity: 0.8; }
 }

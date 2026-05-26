@@ -45,12 +45,6 @@
   background: var(--panel-hover);
 }
 
-.member-tag.active {
-  background: #3a2800;
-  border-color: var(--gold);
-  color: var(--gold);
-}
-
 /* ── Status boxes ─────────────────────────────────────── */
 .status-box {
   border: 2px solid;
@@ -392,15 +386,6 @@
   background: var(--panel);
   border: 2px solid;
   border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
-  cursor: pointer;
-  transition: background 0.1s;
-  user-select: none;
-}
-
-.player-card:hover,
-.player-card:focus-visible {
-  background: var(--panel-hover);
-  outline: none;
 }
 
 .player-card-nameplate {
@@ -472,11 +457,152 @@
   margin: 8px 0;
 }
 
+.card-stat-days {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
 .card-no-activity {
   color: var(--text-dim);
   font-style: italic;
   font-size: 0.82rem;
   padding: 4px 0;
+}
+
+/* ── Home bottom: feed + trending ────────────────────── */
+.home-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.home-panel {
+  background: var(--panel);
+  border: 2px solid;
+  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+}
+
+.home-panel-title {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.5px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border-lo);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.home-panel-sub {
+  font-family: inherit;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  font-weight: normal;
+}
+
+/* ── Activity feed ───────────────────────────────────── */
+.activity-feed {
+  padding: 4px 0;
+}
+
+.feed-day {
+  padding: 6px 0 4px;
+}
+
+.feed-day + .feed-day {
+  border-top: 1px solid var(--border-lo);
+}
+
+.feed-date-label {
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 12px 4px;
+}
+
+.feed-event {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 12px;
+  font-size: 0.85rem;
+}
+
+.feed-event:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.feed-player-tag {
+  font-weight: bold;
+  font-size: 0.78rem;
+  min-width: 52px;
+}
+
+.feed-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.feed-desc {
+  font-weight: bold;
+}
+
+.feed-empty {
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 0.82rem;
+  padding: 10px 12px;
+}
+
+/* ── Trending ────────────────────────────────────────── */
+.trending {
+  padding: 6px 0;
+}
+
+.trending-group {
+  padding: 4px 0 6px;
+}
+
+.trending-group + .trending-group {
+  border-top: 1px solid var(--border-lo);
+  padding-top: 8px;
+}
+
+.trending-group-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  font-weight: bold;
+  padding: 2px 12px 5px;
+}
+
+.trending-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 12px;
+  font-size: 0.85rem;
+}
+
+.trending-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.trending-name {
+  flex: 1;
+  color: var(--text);
+}
+
+.trending-value {
+  font-weight: bold;
+  flex-shrink: 0;
 }
 
 /* ── Player page ─────────────────────────────────────── */
@@ -518,4 +644,5 @@
   .gains-grid { grid-template-columns: 1fr 1fr; }
   .diary-summary { gap: 6px; }
   .player-cards { grid-template-columns: 1fr; }
+  .home-bottom { grid-template-columns: 1fr; }
 }

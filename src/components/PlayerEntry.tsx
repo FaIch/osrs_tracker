@@ -1,17 +1,6 @@
 import type { PlayerDayEntry, BossKill, ActivityGain, SkillGain } from '../utils/diary';
 import { formatXP, prettify } from '../utils/format';
-
-function MetricIcon({ type, metric, className = 'stat-icon' }: { type: string; metric: string; className?: string }) {
-  return (
-    <img
-      src={`${import.meta.env.BASE_URL}icons/${type}/${metric}.png`}
-      alt=""
-      aria-hidden="true"
-      className={className}
-      onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'; }}
-    />
-  );
-}
+import { MetricIcon } from './MetricIcon';
 
 function SkillsColumn({ skills, total }: { skills: SkillGain[]; total: number }) {
   return (

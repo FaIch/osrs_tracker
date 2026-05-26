@@ -1,13 +1,28 @@
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PLAYERS } from '../config';
+import { useData } from '../context/DataContext';
+import { ActivityFeed } from '../components/ActivityFeed';
+import { TrendingSection } from '../components/TrendingSection';
+import { PlayerCard, computePlayerStats } from '../components/PlayerCard';
+
+// ── Page ──────────────────────────────────────────────
+
+const HOME_PLAYERS = ['Flatlus Fred', 'Gonore Geir'] as const;
 
 export function HomePage() {
+  const { diary, loading, errors } = useData();
   const navigate = useNavigate();
+
+  const playerStats = useMemo(
+    () => HOME_PLAYERS.map((name) => ({ name, stats: computePlayerStats(diary, name) })),
+    [diary],
+  );
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1 className="app-title">Group Ironman Diary</h1>
+        <h1 className="app-title">Group Ironman Tracker</h1>
         <div className="group-members">
           {PLAYERS.map((name) => (
             <span
@@ -23,6 +38,41 @@ export function HomePage() {
           ))}
         </div>
       </header>
+
+      <main className="app-main">
+        {loading && (
+          <div className="status-box loading">Fetching player data from Wise Old Man...</div>
+        )}
+
+        {!loading && errors.length > 0 && (
+          <div className="status-box warning">
+            {errors.map((e, i) => <p key={i}>⚠ {e}</p>)}
+          </div>
+        )}
+
+        {!loading && (
+          <>
+            <div className="player-cards">
+              {playerStats.map(({ name, stats }) => (
+                <PlayerCard key={name} name={name} stats={stats} />
+              ))}
+            </div>
+
+            <div className="home-bottom">
+              <section className="home-panel">
+                <h2 className="home-panel-title">Recent Activity</h2>
+                <ActivityFeed diary={diary} dayCount={3} />
+              </section>
+              <section className="home-panel">
+                <h2 className="home-panel-title">
+                  Trending <span className="home-panel-sub">last 3 days</span>
+                </h2>
+                <TrendingSection diary={diary} dayCount={3} />
+              </section>
+            </div>
+          </>
+        )}
+      </main>
     </div>
   );
 }
