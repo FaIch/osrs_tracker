@@ -1,25 +1,13 @@
 import type { PlayerDayEntry, BossKill, ActivityGain, SkillGain } from '../utils/diary';
 import { formatXP, prettify } from '../utils/format';
 
-function SkillIcon({ metric }: { metric: string }) {
+function MetricIcon({ type, metric, className = 'stat-icon' }: { type: string; metric: string; className?: string }) {
   return (
     <img
-      src={`${import.meta.env.BASE_URL}icons/skills/${metric}.png`}
+      src={`${import.meta.env.BASE_URL}icons/${type}/${metric}.png`}
       alt=""
       aria-hidden="true"
-      className="stat-icon"
-      onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'; }}
-    />
-  );
-}
-
-function BossIcon({ metric }: { metric: string }) {
-  return (
-    <img
-      src={`${import.meta.env.BASE_URL}icons/bosses/${metric}.png`}
-      alt=""
-      aria-hidden="true"
-      className="stat-icon"
+      className={className}
       onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'; }}
     />
   );
@@ -29,6 +17,7 @@ function SkillsColumn({ skills, total }: { skills: SkillGain[]; total: number })
   return (
     <div className="stats-column">
       <div className="stats-column-header">
+        <MetricIcon type="skills" metric="stats" />
         <span className="stats-column-title">Skills</span>
         <span className="stats-column-total xp-value">+{formatXP(total)} XP</span>
       </div>
@@ -37,7 +26,7 @@ function SkillsColumn({ skills, total }: { skills: SkillGain[]; total: number })
       ) : (
         skills.map((s) => (
           <div key={s.metric} className="stat-item">
-            <SkillIcon metric={s.metric} />
+            <MetricIcon type="skills" metric={s.metric} />
             <span className="stat-name">{prettify(s.metric)}</span>
             <span className="stat-value xp-value">+{formatXP(s.xpGained)}</span>
           </div>
@@ -60,7 +49,7 @@ function BossesColumn({ bosses }: { bosses: BossKill[] }) {
       ) : (
         bosses.map((b) => (
           <div key={b.metric} className="stat-item">
-            <BossIcon metric={b.metric} />
+            <MetricIcon type="bosses" metric={b.metric} />
             <span className="stat-name">{prettify(b.metric)}</span>
             <span className="stat-value kill-value">×{b.killsGained}</span>
           </div>
@@ -78,13 +67,7 @@ function ActivitiesRow({ activities }: { activities: ActivityGain[] }) {
       <div className="gains-grid">
         {activities.map((a) => (
           <div key={a.metric} className="gain-row">
-            <img
-              src={`${import.meta.env.BASE_URL}icons/activities/${a.metric}.png`}
-              alt=""
-              aria-hidden="true"
-              className="metric-icon"
-              onError={(e) => { (e.currentTarget as HTMLImageElement).style.visibility = 'hidden'; }}
-            />
+            <MetricIcon type="activities" metric={a.metric} className="metric-icon" />
             <span className="metric-name">{prettify(a.metric)}</span>
             <span className="gain-value act-value">+{a.scoreGained}</span>
           </div>
@@ -108,7 +91,7 @@ export function PlayerEntry({ entry }: { entry: PlayerDayEntry }) {
         <div className="level-ups">
           {entry.levelUps.map((lu) => (
             <span key={lu.metric} className="level-up-badge">
-              <SkillIcon metric={lu.metric} />
+              <MetricIcon type="skills" metric={lu.metric} />
               {prettify(lu.metric)} {lu.from}→{lu.to}
             </span>
           ))}

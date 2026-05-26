@@ -43,7 +43,7 @@ export function DiaryEntry({ entry, defaultExpanded }: DiaryEntryProps) {
           {entry.totalLevelUps > 0 && (
             <span className="summary-stat level-stat">
               <span className="stat-label">Levels</span>
-              {entry.totalLevelUps}
+              +{entry.totalLevelUps}
             </span>
           )}
           {entry.totalClues > 0 && (
