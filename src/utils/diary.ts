@@ -1,88 +1,17 @@
-import type { Snapshot, SkillData, BossData, ActivityData } from '../api/wom';
+import type { Snapshot } from '../api/wom';
+import type { PlayerDayEntry, DayEntry } from './diary.types';
+import { toDateKey, skillDelta, bossDelta, activityDelta } from './diary.deltas';
 
-export interface SkillGain {
-  metric: string;
-  xpGained: number;
-  levelStart: number;
-  levelEnd: number;
-}
-
-export interface BossKill {
-  metric: string;
-  killsGained: number;
-}
-
-export interface ActivityGain {
-  metric: string;
-  scoreGained: number;
-}
-
-export interface LevelUp {
-  metric: string;
-  from: number;
-  to: number;
-}
-
-export interface PlayerDayEntry {
-  name: string;
-  skills: SkillGain[];
-  bosses: BossKill[];
-  activities: ActivityGain[];
-  levelUps: LevelUp[];
-  totalXpGained: number;
-}
-
-export interface DayEntry {
-  date: string;
-  players: PlayerDayEntry[];
-  totalXpGained: number;
-  totalBossKills: number;
-  totalClues: number;
-  totalLevelUps: number;
-}
-
-// Aggregate clue tiers into one entry; exclude noisy rank-only metrics.
-const SKIP_ACTIVITIES = new Set(['clue_scrolls_all', 'lms_rank', 'league_points']);
-
-function toDateKey(iso: string): string {
-  return iso.slice(0, 10);
-}
-
-function skillDelta(prev: SkillData, curr: SkillData): SkillGain | null {
-  if (prev.experience < 0 || curr.experience < 0) return null;
-  const xpGained = curr.experience - prev.experience;
-  if (xpGained <= 0 && curr.level === prev.level) return null;
-  return {
-    metric: curr.metric,
-    xpGained: Math.max(0, xpGained),
-    levelStart: prev.level,
-    levelEnd: curr.level,
-  };
-}
-
-function bossDelta(prev: BossData, curr: BossData): BossKill | null {
-  if (prev.kills < 0 || curr.kills < 0) return null;
-  const gained = curr.kills - prev.kills;
-  return gained > 0 ? { metric: curr.metric, killsGained: gained } : null;
-}
-
-function activityDelta(prev: ActivityData, curr: ActivityData): ActivityGain | null {
-  if (SKIP_ACTIVITIES.has(curr.metric)) return null;
-  if (prev.score < 0 || curr.score < 0) return null;
-  const gained = curr.score - prev.score;
-  return gained > 0 ? { metric: curr.metric, scoreGained: gained } : null;
-}
+export type { SkillGain, BossKill, ActivityGain, LevelUp, PlayerDayEntry, DayEntry } from './diary.types';
 
 function processPlayer(name: string, snapshots: Snapshot[]): Map<string, PlayerDayEntry> {
   const result = new Map<string, PlayerDayEntry>();
   if (snapshots.length < 2) return result;
 
-  // Sort ascending
   const sorted = [...snapshots].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
 
-  // Track both first and last snapshot per day
   const byDay = new Map<string, { first: Snapshot; last: Snapshot }>();
   for (const snap of sorted) {
     const key = toDateKey(snap.createdAt);
@@ -98,16 +27,16 @@ function processPlayer(name: string, snapshots: Snapshot[]): Map<string, PlayerD
   for (let i = 0; i < days.length; i++) {
     const [date, { first, last }] = days[i];
 
-    // No previous day → compare earliest snapshot of today to latest (intra-day gains).
+    // No previous day → compare earliest to latest within today (intra-day gains).
     // Previous day exists → compare last snapshot of that day to last of today.
     const prev = i === 0 ? first : days[i - 1][1].last;
     const curr = last;
 
-    // Same object reference means only one snapshot exists for this period — nothing to diff.
+    // Same object reference means only one snapshot for this period — nothing to diff.
     if (prev === curr) continue;
 
-    const skills: SkillGain[] = [];
-    const levelUps: LevelUp[] = [];
+    const skills = [];
+    const levelUps = [];
 
     for (const key of Object.keys(curr.data.skills)) {
       if (key === 'overall') continue;
@@ -122,18 +51,13 @@ function processPlayer(name: string, snapshots: Snapshot[]): Map<string, PlayerD
       }
     }
 
-    const bosses: BossKill[] = [];
-    for (const key of Object.keys(curr.data.bosses)) {
-      const gain = bossDelta(prev.data.bosses[key], curr.data.bosses[key]);
-      if (gain) bosses.push(gain);
-    }
+    const bosses = Object.keys(curr.data.bosses)
+      .map((key) => bossDelta(prev.data.bosses[key], curr.data.bosses[key]))
+      .filter((g) => g !== null);
 
-    const activities: ActivityGain[] = [];
-    for (const key of Object.keys(curr.data.activities)) {
-      const gain = activityDelta(prev.data.activities[key], curr.data.activities[key]);
-      if (gain) activities.push(gain);
-    }
-
+    const activities = Object.keys(curr.data.activities)
+      .map((key) => activityDelta(prev.data.activities[key], curr.data.activities[key]))
+      .filter((g) => g !== null);
 
     const totalXpGained = skills.reduce((s, g) => s + g.xpGained, 0);
     const hasAny = skills.length > 0 || bosses.length > 0 || activities.length > 0;

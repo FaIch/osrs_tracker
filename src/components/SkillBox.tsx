@@ -10,18 +10,7 @@ export const SKILLS_ORDER = [
   'construction', 'hunter',     'sailing',
 ] as const;
 
-function formatXP(xp: number): string {
-  if (xp >= 1_000_000) return `${(xp / 1_000_000).toFixed(2)}M`;
-  if (xp >= 1_000) return `${Math.round(xp / 1_000)}K`;
-  return xp.toLocaleString();
-}
-
-function prettify(metric: string): string {
-  return metric
-    .split('_')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ');
-}
+import { formatXP, prettify } from '../utils/format';
 
 interface SkillBoxProps {
   metric: string;
