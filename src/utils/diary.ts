@@ -77,21 +77,34 @@ function processPlayer(name: string, snapshots: Snapshot[]): Map<string, PlayerD
   const result = new Map<string, PlayerDayEntry>();
   if (snapshots.length < 2) return result;
 
-  // Sort ascending so later snapshots overwrite earlier ones per day
+  // Sort ascending
   const sorted = [...snapshots].sort(
     (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   );
 
-  const byDay = new Map<string, Snapshot>();
+  // Track both first and last snapshot per day
+  const byDay = new Map<string, { first: Snapshot; last: Snapshot }>();
   for (const snap of sorted) {
-    byDay.set(toDateKey(snap.createdAt), snap);
+    const key = toDateKey(snap.createdAt);
+    if (!byDay.has(key)) {
+      byDay.set(key, { first: snap, last: snap });
+    } else {
+      byDay.get(key)!.last = snap;
+    }
   }
 
   const days = [...byDay.entries()].sort(([a], [b]) => a.localeCompare(b));
 
-  for (let i = 1; i < days.length; i++) {
-    const [date, curr] = days[i];
-    const [, prev] = days[i - 1];
+  for (let i = 0; i < days.length; i++) {
+    const [date, { first, last }] = days[i];
+
+    // No previous day → compare earliest snapshot of today to latest (intra-day gains).
+    // Previous day exists → compare last snapshot of that day to last of today.
+    const prev = i === 0 ? first : days[i - 1][1].last;
+    const curr = last;
+
+    // Same snapshot means only one update today with no prior day — nothing to show.
+    if (prev.id === curr.id) continue;
 
     const skills: SkillGain[] = [];
     const levelUps: LevelUp[] = [];
@@ -120,6 +133,7 @@ function processPlayer(name: string, snapshots: Snapshot[]): Map<string, PlayerD
       const gain = activityDelta(prev.data.activities[key], curr.data.activities[key]);
       if (gain) activities.push(gain);
     }
+
 
     const totalXpGained = skills.reduce((s, g) => s + g.xpGained, 0);
     const hasAny = skills.length > 0 || bosses.length > 0 || activities.length > 0;

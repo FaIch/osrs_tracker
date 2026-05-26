@@ -36,6 +36,19 @@
   color: var(--gold-bright);
   padding: 2px 12px;
   font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+}
+
+.member-tag:hover {
+  background: var(--panel-hover);
+}
+
+.member-tag.active {
+  background: #3a2800;
+  border-color: var(--gold);
+  color: var(--gold);
 }
 
 /* ── Status boxes ─────────────────────────────────────── */
