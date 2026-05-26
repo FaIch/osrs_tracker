@@ -250,6 +250,52 @@
 .kill-value { color: var(--boss); }
 .act-value  { color: var(--clue); }
 
+/* ── Skill box grid ───────────────────────────────────── */
+.skills-box-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  margin-top: 8px;
+}
+
+.skill-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 5px 4px;
+  background: var(--panel);
+  border: 1px solid var(--border-lo);
+  text-align: center;
+}
+
+.skill-box--active {
+  border-color: var(--border-hi);
+  background: var(--panel-hover);
+}
+
+.skill-box-icon {
+  width: 22px;
+  height: 22px;
+  image-rendering: pixelated;
+}
+
+.skill-box-name {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.skill-box-xp {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.skill-box-xp--active {
+  color: var(--xp);
+  font-weight: bold;
+}
+
 /* ── Responsive ───────────────────────────────────────── */
 @media (max-width: 600px) {
   .app-title { font-size: 2.2rem; }
