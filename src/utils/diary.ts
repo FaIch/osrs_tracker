@@ -103,8 +103,8 @@ function processPlayer(name: string, snapshots: Snapshot[]): Map<string, PlayerD
     const prev = i === 0 ? first : days[i - 1][1].last;
     const curr = last;
 
-    // Same snapshot means only one update today with no prior day — nothing to show.
-    if (prev.id === curr.id) continue;
+    // Same object reference means only one snapshot exists for this period — nothing to diff.
+    if (prev === curr) continue;
 
     const skills: SkillGain[] = [];
     const levelUps: LevelUp[] = [];
