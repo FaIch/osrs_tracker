@@ -1,73 +1,39 @@
-# React + TypeScript + Vite
+# OSRS Group Ironman Diary
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A GitHub Pages site that tracks daily progress for a Group Ironman team using the [Wise Old Man](https://wiseoldman.net) API. Each day's XP gains, boss kills, level-ups, and clue completions are displayed as diary entries.
 
-Currently, two official plugins are available:
+**Live site:** https://faich.github.io/osrs_tracker/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Group members:** Flatlus Fred · Gonore Geir · Skabb Svein · Kreft Kari
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## How it works
 
-## Expanding the ESLint configuration
+- A scheduled GitHub Action runs every night at **23:30 UTC**, calling the WOM update endpoint for each player to capture a daily snapshot.
+- On page load the site fetches the last 30 days of snapshots per player directly from the WOM API (no backend needed).
+- Daily deltas are computed from consecutive snapshots and rendered as collapsible diary entries, most recent first.
+- Clicking a player's name in the header filters the diary to show only their entries.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## GitHub Actions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Workflow | Trigger | Purpose |
+|---|---|---|
+| `deploy.yml` | Push to `main` | Builds and deploys to GitHub Pages |
+| `update-wom.yml` | Daily 23:30 UTC / manual | Updates each player's WOM snapshot |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+The update workflow can also be triggered manually from the **Actions** tab, which is useful when first setting up or after a long break.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Local development
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- React 19 + TypeScript
+- Vite
+- Wise Old Man API (public, no auth required)
+- GitHub Pages + GitHub Actions
