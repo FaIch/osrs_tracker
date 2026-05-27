@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PLAYERS } from '../config';
 import { useData } from '../context/DataContext';
