@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { PLAYERS } from '../config';
 import { useData } from '../context/DataContext';
-import { formatXP } from '../utils/format';
+import { formatXP, lastName } from '../utils/format';
 import { DiaryEntry } from '../components/DiaryEntry';
 import type { DayEntry } from '../utils/diary';
 
@@ -55,7 +55,7 @@ export function PlayerPage() {
         <button className="back-btn" onClick={() => navigate('/')}>
           ← Group
         </button>
-        <h1 className="app-title">{playerName}</h1>
+        <h1 className="app-title">{lastName(playerName)}</h1>
         {!loading && totalXp > 0 && (
           <span className="player-total-xp xp-value">+{formatXP(totalXp)} XP tracked</span>
         )}

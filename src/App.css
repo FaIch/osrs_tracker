@@ -32,7 +32,7 @@
 .member-tag {
   background: var(--panel);
   border: 1px solid;
-  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  border-color: var(--border-hi);
   color: var(--gold-bright);
   padding: 2px 12px;
   font-size: 0.85rem;
@@ -48,7 +48,7 @@
 /* ── Status boxes ─────────────────────────────────────── */
 .status-box {
   border: 2px solid;
-  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  border-color: var(--border-hi);
   background: var(--panel);
   padding: 16px 20px;
   margin-bottom: 14px;
@@ -78,7 +78,7 @@
 .diary-entry {
   background: var(--panel);
   border: 2px solid;
-  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  border-color: var(--border-hi);
   margin-bottom: 10px;
 }
 
@@ -215,7 +215,7 @@
 .stats-column {
   background: #131008;
   border: 1px solid;
-  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  border-color: var(--border-hi);
 }
 
 .stats-column-header {
@@ -385,7 +385,7 @@
 .player-card {
   background: var(--panel);
   border: 2px solid;
-  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  border-color: var(--border-hi);
 }
 
 .player-card-nameplate {
@@ -480,7 +480,7 @@
 .home-panel {
   background: var(--panel);
   border: 2px solid;
-  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  border-color: var(--border-hi);
 }
 
 .home-panel-title {
@@ -617,7 +617,7 @@
   transform: translateY(-50%);
   background: var(--panel);
   border: 1px solid;
-  border-color: var(--border-hi) var(--border-lo) var(--border-lo) var(--border-hi);
+  border-color: var(--border-hi);
   color: var(--gold-bright);
   padding: 4px 14px;
   font-family: inherit;

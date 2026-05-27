@@ -1,5 +1,5 @@
 import type { PlayerDayEntry, BossKill, ActivityGain, SkillGain } from '../utils/diary';
-import { formatXP, prettify } from '../utils/format';
+import { formatXP, prettify, lastName } from '../utils/format';
 import { MetricIcon } from './MetricIcon';
 
 function SkillsColumn({ skills, total }: { skills: SkillGain[]; total: number }) {
@@ -70,7 +70,7 @@ export function PlayerEntry({ entry }: { entry: PlayerDayEntry }) {
   return (
     <div className="player-entry">
       <div className="player-entry-header">
-        <span className="player-name">{entry.name}</span>
+        <span className="player-name">{lastName(entry.name)}</span>
         {entry.totalXpGained > 0 && (
           <span className="xp-total">+{formatXP(entry.totalXpGained)} XP</span>
         )}

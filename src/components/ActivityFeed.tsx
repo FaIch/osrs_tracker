@@ -1,6 +1,6 @@
 import { PLAYERS } from '../config';
 import { MetricIcon } from './MetricIcon';
-import { formatDate, prettify } from '../utils/format';
+import { formatDate, prettify, lastName } from '../utils/format';
 import type { DayEntry } from '../utils/diary';
 
 const PLAYER_COLORS = ['var(--gold)', 'var(--xp)', 'var(--boss)', 'var(--clue)'];
@@ -57,7 +57,7 @@ export function ActivityFeed({ diary, dayCount = 3 }: Props) {
           {dayEvents.map((ev, i) => (
             <div key={i} className="feed-event">
               <span className="feed-player-tag" style={{ color: playerColor(ev.playerName) }}>
-                {ev.playerName.split(' ')[0]}
+                {lastName(ev.playerName)}
               </span>
               <MetricIcon
                 type={ev.type === 'level_up' ? 'skills' : 'bosses'}

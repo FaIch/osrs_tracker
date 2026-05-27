@@ -1,4 +1,4 @@
-import { formatXP } from '../utils/format';
+import { formatXP, lastName } from '../utils/format';
 import type { DayEntry } from '../utils/diary';
 
 interface PlayerStats {
@@ -22,7 +22,7 @@ export function PlayerCard({ name, stats }: { name: string; stats: ReturnType<ty
   return (
     <div className="player-card">
       <div className="player-card-nameplate">
-        <span className="player-card-name">{name}</span>
+        <span className="player-card-name">{lastName(name)}</span>
       </div>
       <div className="player-card-body">
         {stats.totalDays === 0 ? (

@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PLAYERS } from '../config';
 import { useData } from '../context/DataContext';
+import { lastName } from '../utils/format';
 import { ActivityFeed } from '../components/ActivityFeed';
 import { TrendingSection } from '../components/TrendingSection';
 import { PlayerCard, computePlayerStats } from '../components/PlayerCard';
@@ -33,7 +34,7 @@ export function HomePage() {
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && navigate(`/player/${encodeURIComponent(name)}`)}
             >
-              {name}
+              {lastName(name)}
             </span>
           ))}
         </div>

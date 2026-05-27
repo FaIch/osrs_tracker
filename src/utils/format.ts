@@ -1,3 +1,7 @@
+export function lastName(name: string): string {
+  return name.split(' ').at(-1) ?? name;
+}
+
 export function formatXP(xp: number): string {
   if (xp >= 1_000_000) return `${(xp / 1_000_000).toFixed(2)}M`;
   if (xp >= 1_000) return `${Math.round(xp / 1_000)}K`;
