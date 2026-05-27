@@ -3,17 +3,9 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer,
 } from 'recharts';
-import { PLAYERS } from '../config';
+import { PLAYERS, PLAYER_COLORS } from '../config';
 import { formatXP, lastName } from '../utils/format';
 import type { DayEntry } from '../utils/diary';
-
-// Hex equivalents of the CSS palette vars (recharts needs real colours)
-const PLAYER_COLORS: Record<string, string> = {
-  'Flatlus Fred': '#ff981f',
-  'Gonore Geir':  '#a0e88a',
-  'Skabb Svein':  '#e87c5a',
-  'Kreft Kari':   '#80c8ff',
-};
 
 const PERIODS = [
   { label: '3d',    days: 3  },
@@ -85,7 +77,7 @@ interface Props {
 }
 
 export function XpChart({ diary }: Props) {
-  const [period, setPeriod] = useState(7);
+  const [period, setPeriod] = useState(3);
 
   const data = useMemo(() => buildChartData(diary, period), [diary, period]);
   const hasData = data.some((d) => PLAYERS.some((p) => (d[p] as number) > 0));

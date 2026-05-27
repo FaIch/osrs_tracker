@@ -1,12 +1,10 @@
-import { PLAYERS } from '../config';
+import { PLAYER_COLORS } from '../config';
 import { MetricIcon } from './MetricIcon';
 import { formatDate, prettify, lastName } from '../utils/format';
 import type { DayEntry } from '../utils/diary';
 
-const PLAYER_COLORS = ['var(--gold)', 'var(--xp)', 'var(--boss)', 'var(--clue)'];
 function playerColor(name: string) {
-  const idx = PLAYERS.indexOf(name as (typeof PLAYERS)[number]);
-  return PLAYER_COLORS[idx] ?? 'var(--text)';
+  return PLAYER_COLORS[name] ?? 'var(--text)';
 }
 
 interface FeedEvent {

@@ -8,6 +8,7 @@ import type { DayEntry } from '../utils/diary';
 
 interface DataContextValue {
   diary: DayEntry[];
+  snapshots: Record<string, Snapshot[]>;
   loading: boolean;
   errors: string[];
 }
@@ -16,27 +17,29 @@ const DataContext = createContext<DataContextValue | null>(null);
 
 export function DataProvider({ children }: { children: ReactNode }) {
   const [diary, setDiary] = useState<DayEntry[]>([]);
+  const [snapshots, setSnapshots] = useState<Record<string, Snapshot[]>>({});
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     async function load() {
-      const snapshots: Record<string, Snapshot[]> = {};
+      const snaps: Record<string, Snapshot[]> = {};
       const errs: string[] = [];
 
       await Promise.all(
         PLAYERS.map(async (name: PlayerName) => {
           try {
-            snapshots[name] = await fetchPlayerSnapshots(name);
+            snaps[name] = await fetchPlayerSnapshots(name);
           } catch (err) {
             errs.push(err instanceof Error ? err.message : String(err));
-            snapshots[name] = [];
+            snaps[name] = [];
           }
         }),
       );
 
       setErrors(errs);
-      setDiary(buildDiary(snapshots));
+      setSnapshots(snaps);
+      setDiary(buildDiary(snaps));
       setLoading(false);
     }
 
@@ -44,7 +47,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <DataContext.Provider value={{ diary, loading, errors }}>
+    <DataContext.Provider value={{ diary, snapshots, loading, errors }}>
       {children}
     </DataContext.Provider>
   );

@@ -1,17 +1,26 @@
 import { useMemo } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { PLAYERS } from '../config';
+import { PLAYERS, PLAYER_ICON_FILTERS } from '../config';
 import { useData } from '../context/DataContext';
-import { formatXP, lastName } from '../utils/format';
+import { lastName } from '../utils/format';
 import { DiaryEntry } from '../components/DiaryEntry';
+import { PlayerOverview } from '../components/PlayerOverview';
 import type { DayEntry } from '../utils/diary';
 
 export function PlayerPage() {
   const { name: rawName } = useParams<{ name: string }>();
   const navigate = useNavigate();
-  const { diary, loading, errors } = useData();
+  const { diary, snapshots, loading, errors } = useData();
 
   const playerName = rawName ?? '';
+
+  const latestSnapshot = snapshots[playerName]
+    ? [...snapshots[playerName]].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )[0]
+    : undefined;
+
+  
 
   const playerDiary = useMemo((): DayEntry[] => {
     return diary
@@ -40,11 +49,6 @@ export function PlayerPage() {
       .filter((e): e is DayEntry => e !== null);
   }, [diary, playerName]);
 
-  const totalXp = useMemo(
-    () => playerDiary.reduce((s, d) => s + d.totalXpGained, 0),
-    [playerDiary],
-  );
-
   if (!loading && playerName && !PLAYERS.includes(playerName as (typeof PLAYERS)[number])) {
     return <Navigate to="/" replace />;
   }
@@ -55,10 +59,10 @@ export function PlayerPage() {
         <button className="back-btn" onClick={() => navigate('/')}>
           ← Group
         </button>
-        <h1 className="app-title">{lastName(playerName)}</h1>
-        {!loading && totalXp > 0 && (
-          <span className="player-total-xp xp-value">+{formatXP(totalXp)} XP tracked</span>
-        )}
+        <h1 className="app-title">
+          <img src={`${import.meta.env.BASE_URL}icons/general/gim_icon.webp`} className="player-header-icon" alt="" aria-hidden="true" style={{ filter: PLAYER_ICON_FILTERS[playerName] }} />
+          {lastName(playerName)}
+        </h1>
       </header>
 
       <main className="app-main">
@@ -74,6 +78,10 @@ export function PlayerPage() {
           </div>
         )}
 
+        {!loading && latestSnapshot && (
+          <PlayerOverview snapshot={latestSnapshot} />
+        )}
+
         {!loading && playerDiary.length === 0 && errors.length === 0 && (
           <div className="status-box empty">
             No activity recorded yet. Data will appear after the first daily snapshot is captured.
@@ -81,7 +89,7 @@ export function PlayerPage() {
         )}
 
         {playerDiary.map((entry, i) => (
-          <DiaryEntry key={entry.date} entry={entry} defaultExpanded={i < 3} />
+          <DiaryEntry key={entry.date} entry={entry} defaultExpanded={i === 0} />
         ))}
       </main>
     </div>

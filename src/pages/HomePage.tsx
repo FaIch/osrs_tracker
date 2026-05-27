@@ -1,13 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { PLAYERS } from '../config';
+import { PLAYERS, PLAYER_ICON_FILTERS } from '../config';
 import { useData } from '../context/DataContext';
 import { lastName } from '../utils/format';
 import { ActivityFeed } from '../components/ActivityFeed';
 import { TrendingSection } from '../components/TrendingSection';
 import { XpChart } from '../components/XpChart';
-
-// ── Page ──────────────────────────────────────────────
-
 
 
 export function HomePage() {
@@ -28,7 +25,8 @@ export function HomePage() {
               tabIndex={0}
               onKeyDown={(e) => e.key === 'Enter' && navigate(`/player/${encodeURIComponent(name)}`)}
             >
-              {lastName(name)}
+              <img src={`${import.meta.env.BASE_URL}icons/general/gim_icon.webp`} className="member-tag-icon" alt="" aria-hidden="true" style={{ filter: PLAYER_ICON_FILTERS[name] }} />
+              {lastName(name)}<span className="member-tag-arrow">→</span>
             </span>
           ))}
         </div>
