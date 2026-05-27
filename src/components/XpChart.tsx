@@ -127,7 +127,7 @@ export function XpChart({ diary }: Props) {
               tickLine={false}
               width={46}
             />
-            <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.08)' }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'rgba(255,255,255,0.25)', strokeDasharray: '4 4' }} />
             {PLAYERS.map((name) => (
               <Line
                 key={name}
@@ -135,8 +135,8 @@ export function XpChart({ diary }: Props) {
                 dataKey={name}
                 stroke={PLAYER_COLORS[name]}
                 strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 4, strokeWidth: 0, fill: PLAYER_COLORS[name] }}
+                dot={{ r: 3, strokeWidth: 2, stroke: '#fff', strokeOpacity: 1, fill: PLAYER_COLORS[name] }}
+                activeDot={{ r: 5, strokeWidth: 2, stroke: '#fff', strokeOpacity: 1, fill: PLAYER_COLORS[name] }}
               />
             ))}
           </LineChart>
