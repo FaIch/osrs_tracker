@@ -598,7 +598,7 @@
 /* ── Home bottom: feed + trending ────────────────────── */
 .home-bottom {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   margin-top: 10px;
 }
@@ -631,10 +631,6 @@
 }
 
 /* ── Activity feed ───────────────────────────────────── */
-.activity-feed {
-  padding: 4px 0;
-}
-
 .feed-day {
   padding: 6px 0 4px;
 }
@@ -688,9 +684,6 @@
 }
 
 /* ── Trending ────────────────────────────────────────── */
-.trending {
-  padding: 6px 0;
-}
 
 .trending-group {
   padding: 4px 0 6px;
@@ -721,6 +714,12 @@
   background: rgba(255, 255, 255, 0.02);
 }
 
+.trending-row-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
 .trending-name {
   flex: 1;
   color: var(--text);
@@ -729,6 +728,107 @@
 .trending-value {
   font-weight: bold;
   flex-shrink: 0;
+}
+
+/* ── Drops panel ─────────────────────────────────────── */
+.drops-list {
+
+  overflow-y: auto;
+  max-height: 340px;
+}
+
+.drops-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.drops-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drops-list::-webkit-scrollbar-thumb {
+  background: var(--border-hi);
+  border-radius: 2px;
+}
+
+.drop-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  font-size: 0.82rem;
+  transition: background 0.1s;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.drop-row:not(:last-child) {
+  border-bottom: 1px solid var(--border-lo);
+}
+
+.drop-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.drop-item-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+
+.drop-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.drop-info-primary {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.drop-info-secondary {
+  font-size: 0.74rem;
+}
+
+.drop-player {
+  font-weight: bold;
+}
+
+.drop-source {
+  color: var(--text-dim);
+}
+
+.drop-rarity {
+  color: var(--text-dim);
+  font-size: 0.76rem;
+}
+
+.drop-item-name {
+  color: var(--text);
+  font-weight: bold;
+}
+
+.drop-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+  gap: 1px;
+}
+
+.drop-value {
+  font-weight: bold;
+  color: var(--xp);
+}
+
+.drop-time {
+  color: var(--text-dim);
+  font-size: 0.68rem;
 }
 
 /* ── Player overview card ────────────────────────────── */
@@ -848,4 +948,5 @@
   .diary-summary { gap: 6px; }
   .player-cards { grid-template-columns: 1fr; }
   .home-bottom { grid-template-columns: 1fr; }
+  .home-bottom > section:last-child { order: -1; }
 }

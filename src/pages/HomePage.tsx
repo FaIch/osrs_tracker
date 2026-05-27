@@ -5,6 +5,7 @@ import { lastName } from '../utils/format';
 import { ActivityFeed } from '../components/ActivityFeed';
 import { TrendingSection } from '../components/TrendingSection';
 import { XpChart } from '../components/XpChart';
+import { DropsPanel } from '../components/DropsPanel';
 
 
 export function HomePage() {
@@ -57,6 +58,7 @@ export function HomePage() {
                 </h2>
                 <TrendingSection diary={diary} dayCount={3} />
               </section>
+              <DropsPanel />
             </div>
           </>
         )}

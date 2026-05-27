@@ -54,11 +54,17 @@ export function TrendingSection({ diary, dayCount = 3 }: Props) {
         <div className="trending-group">
           <div className="trending-group-label kill-value">Bosses</div>
           {topBosses.map(({ metric, total }) => (
-            <div key={metric} className="trending-row">
+            <a
+              key={metric}
+              className="trending-row trending-row-link"
+              href={`https://oldschool.runescape.wiki/w/${encodeURIComponent(prettify(metric).replace(/ /g, '_'))}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <MetricIcon type="bosses" metric={metric} className="feed-icon" />
               <span className="trending-name">{prettify(metric)}</span>
               <span className="trending-value kill-value">×{total}</span>
-            </div>
+            </a>
           ))}
         </div>
       )}
