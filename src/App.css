@@ -469,6 +469,103 @@
   padding: 4px 0;
 }
 
+/* ── XP Chart ────────────────────────────────────────── */
+.xp-chart {
+  background: var(--panel);
+  border: 2px solid var(--border-hi);
+  margin-bottom: 10px;
+  padding: 0 0 12px;
+}
+
+.xp-chart-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border-lo);
+  flex-wrap: wrap;
+}
+
+.xp-chart-title {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.5px;
+}
+
+.xp-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  flex: 1;
+}
+
+.chart-legend-item {
+  font-size: 0.78rem;
+  font-weight: bold;
+}
+
+.xp-chart-periods {
+  display: flex;
+  gap: 4px;
+}
+
+.chart-period-btn {
+  background: transparent;
+  border: 1px solid var(--border-hi);
+  color: var(--text-dim);
+  padding: 2px 10px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+
+.chart-period-btn:hover {
+  background: var(--panel-hover);
+  color: var(--text);
+}
+
+.chart-period-btn.active {
+  background: #3a2800;
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+.chart-empty {
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 0.82rem;
+  padding: 20px 14px;
+  text-align: center;
+}
+
+.chart-tooltip {
+  background: #1a1208;
+  border: 1px solid var(--border-hi);
+  padding: 8px 12px;
+  font-size: 0.82rem;
+}
+
+.chart-tooltip-date {
+  color: var(--text-dim);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.chart-tooltip-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.chart-tooltip-value {
+  color: var(--text);
+}
+
 /* ── Home bottom: feed + trending ────────────────────── */
 .home-bottom {
   display: grid;

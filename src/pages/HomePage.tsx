@@ -5,7 +5,7 @@ import { useData } from '../context/DataContext';
 import { lastName } from '../utils/format';
 import { ActivityFeed } from '../components/ActivityFeed';
 import { TrendingSection } from '../components/TrendingSection';
-import { PlayerCard, computePlayerStats } from '../components/PlayerCard';
+import { XpChart } from '../components/XpChart';
 
 // ── Page ──────────────────────────────────────────────
 
@@ -14,11 +14,6 @@ const HOME_PLAYERS = ['Flatlus Fred', 'Gonore Geir'] as const;
 export function HomePage() {
   const { diary, loading, errors } = useData();
   const navigate = useNavigate();
-
-  const playerStats = useMemo(
-    () => HOME_PLAYERS.map((name) => ({ name, stats: computePlayerStats(diary, name) })),
-    [diary],
-  );
 
   return (
     <div className="app">
@@ -53,12 +48,7 @@ export function HomePage() {
 
         {!loading && (
           <>
-            <div className="player-cards">
-              {playerStats.map(({ name, stats }) => (
-                <PlayerCard key={name} name={name} stats={stats} />
-              ))}
-            </div>
-
+            <XpChart diary={diary} />
             <div className="home-bottom">
               <section className="home-panel">
                 <h2 className="home-panel-title">Recent Activity</h2>
