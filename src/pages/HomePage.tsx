@@ -9,7 +9,7 @@ import { XpChart } from '../components/XpChart';
 
 // ── Page ──────────────────────────────────────────────
 
-const HOME_PLAYERS = ['Flatlus Fred', 'Gonore Geir'] as const;
+
 
 export function HomePage() {
   const { diary, loading, errors } = useData();
