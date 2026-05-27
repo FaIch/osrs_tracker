@@ -1,19 +1,17 @@
-# OSRS Group Ironman Diary
+# OSRS Group Ironman Tracker
 
-A GitHub Pages site that tracks daily progress for a Group Ironman team using the [Wise Old Man](https://wiseoldman.net) API. Each day's XP gains, boss kills, level-ups, and clue completions are displayed as diary entries.
+A GitHub Pages site that tracks daily progress for a Group Ironman team. Shows XP gains, boss kills, level-ups, clue completions, and recent loot drops.
 
 **Live site:** https://faich.github.io/osrs_tracker/
-
-**Group members:** Flatlus Fred · Gonore Geir · Skabb Svein · Kreft Kari
 
 ---
 
 ## How it works
 
-- A scheduled GitHub Action runs every night at **23:30 UTC**, calling the WOM update endpoint for each player to capture a daily snapshot.
-- On page load the site fetches the last 30 days of snapshots per player directly from the WOM API (no backend needed).
-- Daily deltas are computed from consecutive snapshots and rendered as collapsible diary entries, most recent first.
-- Clicking a player's name in the header filters the diary to show only their entries.
+- On page load the site fetches player snapshots from [Wise Old Man](https://wiseoldman.net) and computes daily deltas rendered as collapsible diary entries, most recent first.
+- The **Update** button on the home page triggers WOM to pull a fresh snapshot from the OSRS hiscores for each group member.
+- A [Dink](https://github.com/pajlads/DinkPlugin) RuneLite plugin posts loot drop events to a **Cloudflare Worker** through a Discord Webhook, which stores and serves them. The tracker fetches drops from the Worker and displays them in the Recent Drops panel.
+- Drop filtering (by value threshold, item allowlist, etc.) is configured in the Dink plugin settings on each player's RuneLite client.
 
 ## GitHub Actions
 
@@ -21,8 +19,6 @@ A GitHub Pages site that tracks daily progress for a Group Ironman team using th
 |---|---|---|
 | `deploy.yml` | Push to `main` | Builds and deploys to GitHub Pages |
 | `update-wom.yml` | Daily 23:30 UTC / manual | Updates each player's WOM snapshot |
-
-The update workflow can also be triggered manually from the **Actions** tab, which is useful when first setting up or after a long break.
 
 ## Local development
 
@@ -33,7 +29,8 @@ npm run dev
 
 ## Stack
 
-- React 19 + TypeScript
-- Vite
-- Wise Old Man API (public, no auth required)
+- React 19 + TypeScript + Vite
+- [Wise Old Man API](https://wiseoldman.net) — XP, boss kills, level-ups
+- Cloudflare Worker — receives and stores loot drop events from Dink
+- Dink RuneLite plugin — posts in-game drop notifications to the Worker
 - GitHub Pages + GitHub Actions
