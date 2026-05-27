@@ -34,6 +34,15 @@ export interface Snapshot {
   data: SnapshotData;
 }
 
+export async function updatePlayer(username: string): Promise<void> {
+  const res = await fetch(`${WOM_API}/players/${encodeURIComponent(username)}`, {
+    method: 'POST',
+  });
+  if (!res.ok && res.status !== 429) {
+    throw new Error(`Failed to update "${username}" (HTTP ${res.status})`);
+  }
+}
+
 export async function fetchPlayerSnapshots(username: string): Promise<Snapshot[]> {
   const res = await fetch(
     `${WOM_API}/players/${encodeURIComponent(username)}/snapshots`,

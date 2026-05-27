@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
 import { PLAYERS } from '../config';
 import type { PlayerName } from '../config';
 import { fetchPlayerSnapshots } from '../api/wom';
@@ -11,6 +11,7 @@ interface DataContextValue {
   snapshots: Record<string, Snapshot[]>;
   loading: boolean;
   errors: string[];
+  refresh: () => Promise<void>;
 }
 
 const DataContext = createContext<DataContextValue | null>(null);
@@ -21,33 +22,32 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState<string[]>([]);
 
-  useEffect(() => {
-    async function load() {
-      const snaps: Record<string, Snapshot[]> = {};
-      const errs: string[] = [];
+  const load = useCallback(async () => {
+    setLoading(true);
+    const snaps: Record<string, Snapshot[]> = {};
+    const errs: string[] = [];
 
-      await Promise.all(
-        PLAYERS.map(async (name: PlayerName) => {
-          try {
-            snaps[name] = await fetchPlayerSnapshots(name);
-          } catch (err) {
-            errs.push(err instanceof Error ? err.message : String(err));
-            snaps[name] = [];
-          }
-        }),
-      );
+    await Promise.all(
+      PLAYERS.map(async (name: PlayerName) => {
+        try {
+          snaps[name] = await fetchPlayerSnapshots(name);
+        } catch (err) {
+          errs.push(err instanceof Error ? err.message : String(err));
+          snaps[name] = [];
+        }
+      }),
+    );
 
-      setErrors(errs);
-      setSnapshots(snaps);
-      setDiary(buildDiary(snaps));
-      setLoading(false);
-    }
-
-    load();
+    setErrors(errs);
+    setSnapshots(snaps);
+    setDiary(buildDiary(snaps));
+    setLoading(false);
   }, []);
 
+  useEffect(() => { load(); }, [load]);
+
   return (
-    <DataContext.Provider value={{ diary, snapshots, loading, errors }}>
+    <DataContext.Provider value={{ diary, snapshots, loading, errors, refresh: load }}>
       {children}
     </DataContext.Provider>
   );
