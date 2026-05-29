@@ -678,6 +678,24 @@
 }
 
 /* ── Activity feed ───────────────────────────────────── */
+.activity-feed {
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+.activity-feed::-webkit-scrollbar {
+  width: 4px;
+}
+
+.activity-feed::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.activity-feed::-webkit-scrollbar-thumb {
+  background: var(--border-hi);
+  border-radius: 2px;
+}
+
 .feed-day {
   padding: 6px 0 4px;
 }
