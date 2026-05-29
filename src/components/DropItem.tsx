@@ -32,7 +32,8 @@ export function DropItem({ drop }: Props) {
           {topItem.rarity != null && (
             <span className="drop-rarity">{formatRarity(topItem.rarity)} · </span>
           )}
-          <span className="drop-player" style={{ color }}>{lastName(drop.playerName)}</span>
+          <span className="drop-player" style={{ color }}>{lastName(drop.playerName)} </span>
+          <span className="drop-rarity">· Kill Count: {drop.extra.killCount}</span>
         </div>
       </div>
       <div className="drop-right">
