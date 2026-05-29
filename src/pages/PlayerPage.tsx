@@ -6,23 +6,16 @@ import { lastName } from '../utils/format';
 import { Calendar } from '../components/Calendar';
 import { DayDetail } from '../components/DayDetail';
 import { PlayerOverview } from '../components/PlayerOverview';
-import { fetchDrops } from '../api/drops';
-import type { Drop } from '../api/drops';
 import type { PlayerDayEntry } from '../utils/diary';
 
 export function PlayerPage() {
   const { name: rawName } = useParams<{ name: string }>();
   const navigate = useNavigate();
-  const { diary, snapshots, loading } = useData();
+  const { diary, snapshots, drops, loading } = useData();
 
   const playerName = rawName ?? '';
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [drops, setDrops] = useState<Drop[]>([]);
-
-  useEffect(() => {
-    fetchDrops().then(setDrops).catch(() => {});
-  }, []);
 
   const latestSnapshot = snapshots[playerName]
 

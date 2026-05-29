@@ -22,53 +22,15 @@ export function DayDetail({ date, entry, drops }: Props) {
         <div className="day-detail-empty">No data for this day.</div>
       )}
 
-      {entry && entry.levelUps.length > 0 && (
-        <div className="day-detail-section">
-          <div className="day-detail-section-label level-stat">Level Ups</div>
-          <div className="level-ups">
-            {entry.levelUps.map((lu) => (
-              <span key={lu.metric} className="level-up-badge">
-                <MetricIcon type="skills" metric={lu.metric} className="stat-icon" />
-                {prettify(lu.metric)} {lu.from}→{lu.to}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {entry && entry.skills.length > 0 && (
-        <div className="day-detail-section">
-          <div className="day-detail-section-label xp-value">Skills</div>
-          <div className="day-detail-rows">
-            {entry.skills.map((s) => (
-              <div key={s.metric} className="day-detail-row">
-                <MetricIcon type="skills" metric={s.metric} className="stat-icon" />
-                <span className="day-detail-name">{prettify(s.metric)}</span>
-                <span className="day-detail-value xp-value">+{formatXP(s.xpGained)}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {entry && entry.bosses.length > 0 && (
-        <div className="day-detail-section">
-          <div className="day-detail-section-label boss-stat">Bosses</div>
-          <div className="day-detail-rows">
-            {entry.bosses.map((b) => (
-              <div key={b.metric} className="day-detail-row">
-                <MetricIcon type="bosses" metric={b.metric} className="stat-icon" />
-                <span className="day-detail-name">{prettify(b.metric)}</span>
-                <span className="day-detail-value kill-value">×{b.killsGained}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {drops.length > 0 && (
         <div className="day-detail-section">
-          <div className="day-detail-section-label drop-value">Drops</div>
+          <div className="day-detail-section-label">
+            <span className="day-detail-section-label-left drop-value">
+              <img src={`${import.meta.env.BASE_URL}icons/general/backpack.png`} className="section-label-icon" alt="" aria-hidden="true" />
+              Drops
+            </span>
+            <span className="xp-value">Total Value: {formatGP(drops.reduce((s, d) => s + dropTotalValue(d), 0))}</span>
+          </div>
           <div className="day-detail-rows">
             {drops.map((drop) => {
               const top = dropTopItem(drop);
@@ -98,6 +60,59 @@ export function DayDetail({ date, entry, drops }: Props) {
                 </a>
               );
             })}
+          </div>
+        </div>
+      )}
+
+      {entry && entry.bosses.length > 0 && (
+        <div className="day-detail-section">
+          <div className="day-detail-section-label">
+            <span className="day-detail-section-label-left boss-stat">
+              <MetricIcon type="skills" metric="combat" className="section-label-icon" />
+              Bosses
+            </span>
+            <span className="boss-stat">Total Kills: {entry.bosses.reduce((s, b) => s + b.killsGained, 0)}</span>
+          </div>
+          <div className="day-detail-rows">
+            {entry.bosses.map((boss) => (
+              <a
+                key={boss.metric}
+                className="day-detail-row day-detail-row-link"
+                href={`https://oldschool.runescape.wiki/w/${encodeURIComponent(prettify(boss.metric).replace(/ /g, '_'))}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MetricIcon type="bosses" metric={boss.metric} />
+                <span className="day-detail-name">{prettify(boss.metric)}</span>
+                <span className="day-detail-value">{boss.killsGained} kc</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {entry && entry.skills.length > 0 && (
+        <div className="day-detail-section">
+          <div className="day-detail-section-label">
+            <span className="day-detail-section-label-left xp-value">
+              <MetricIcon type="skills" metric="stats" className="section-label-icon" />
+              Skills
+            </span>
+            <span className="xp-value">Total XP: +{formatXP(entry.totalXpGained)}</span>
+          </div>
+          <div className="day-detail-rows">
+            {entry.skills.map((skill) => (
+              <div key={skill.metric} className="day-detail-row">
+                <MetricIcon type="skills" metric={skill.metric} />
+                <span className="day-detail-name">
+                  {prettify(skill.metric)}
+                  {skill.levelEnd > skill.levelStart && (
+                    <span className="day-detail-levelup"> {skill.levelStart} → {skill.levelEnd}</span>
+                  )}
+                </span>
+                <span className="day-detail-value xp-value">+{formatXP(skill.xpGained)}</span>
+              </div>
+            ))}
           </div>
         </div>
       )}
