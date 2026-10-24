@@ -4,8 +4,12 @@ import {
   Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { PLAYERS, PLAYER_COLORS } from '../config';
-import { formatXP, lastName } from '../utils/format';
+import { formatXP, lastName, relativeTime } from '../utils/format';
 import type { DayEntry } from '../utils/diary';
+import type { Snapshot } from '../api/wom';
+
+// Snapshots older than this mark the chart as stale (the daily job runs at 23:30 UTC).
+const STALE_AFTER_MS = 26 * 60 * 60 * 1000;
 
 const PERIODS = [
   { label: '3d',    days: 3  },
@@ -72,15 +76,29 @@ function CustomTooltip({ active, payload, label }: {
   );
 }
 
-interface Props {
-  diary: DayEntry[];
+function latestSnapshotAt(snapshots: Record<string, Snapshot[]>): string | null {
+  let latest: string | null = null;
+  for (const snaps of Object.values(snapshots)) {
+    for (const s of snaps) {
+      if (!latest || s.createdAt > latest) latest = s.createdAt;
+    }
+  }
+  return latest;
 }
 
-export function XpChart({ diary }: Props) {
+interface Props {
+  diary: DayEntry[];
+  snapshots: Record<string, Snapshot[]>;
+}
+
+export function XpChart({ diary, snapshots }: Props) {
   const [period, setPeriod] = useState(3);
 
   const data = useMemo(() => buildChartData(diary, period), [diary, period]);
   const hasData = data.some((d) => PLAYERS.some((p) => (d[p] as number) > 0));
+  const lastSnapshot = useMemo(() => latestSnapshotAt(snapshots), [snapshots]);
+  const [loadedAt] = useState(() => Date.now());
+  const isStale = lastSnapshot !== null && loadedAt - new Date(lastSnapshot).getTime() > STALE_AFTER_MS;
 
   return (
     <div className="xp-chart">
@@ -93,6 +111,14 @@ export function XpChart({ diary }: Props) {
             </span>
           ))}
         </div>
+        {lastSnapshot && (
+          <span
+            className={`xp-chart-updated${isStale ? ' stale' : ''}`}
+            title={new Date(lastSnapshot).toLocaleString('en-GB')}
+          >
+            Last snapshot {tickDate(lastSnapshot.slice(0, 10))} · {relativeTime(lastSnapshot)}
+          </span>
+        )}
         <div className="xp-chart-periods">
           {PERIODS.map(({ label, days }) => (
             <button
@@ -107,7 +133,11 @@ export function XpChart({ diary }: Props) {
       </div>
 
       {!hasData ? (
-        <div className="chart-empty">No data for this period</div>
+        <div className="chart-empty">
+          {isStale && lastSnapshot
+            ? `No data for this period. No snapshots since ${tickDate(lastSnapshot.slice(0, 10))}, so press Update to fetch fresh data.`
+            : 'No data for this period'}
+        </div>
       ) : (
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 0 }}>

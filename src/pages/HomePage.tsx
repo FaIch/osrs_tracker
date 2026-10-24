@@ -10,7 +10,7 @@ import { XpChart } from '../components/XpChart';
 import { DropsPanel } from '../components/DropsPanel';
 
 export function HomePage() {
-  const { diary, loading, errors, refresh } = useData();
+  const { diary, snapshots, loading, errors, refresh } = useData();
   const navigate = useNavigate();
   const [updating, setUpdating] = useState(false);
   const [updateStatus, setUpdateStatus] = useState<'success' | 'error' | null>(null);
@@ -76,7 +76,7 @@ export function HomePage() {
 
         {!loading && (
           <>
-            <XpChart diary={diary} />
+            <XpChart diary={diary} snapshots={snapshots} />
             <div className="home-bottom">
               <section className="home-panel">
                 <h2 className="home-panel-title">Recent Activity</h2>

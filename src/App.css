@@ -581,6 +581,15 @@
   font-weight: bold;
 }
 
+.xp-chart-updated {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.xp-chart-updated.stale {
+  color: var(--gold);
+}
+
 .xp-chart-periods {
   display: flex;
   gap: 4px;
