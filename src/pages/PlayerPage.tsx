@@ -6,6 +6,7 @@ import { lastName } from '../utils/format';
 import { Calendar } from '../components/Calendar';
 import { DayDetail } from '../components/DayDetail';
 import { PlayerOverview } from '../components/PlayerOverview';
+import { SkillsTab } from '../components/SkillsTab';
 import type { PlayerDayEntry } from '../utils/diary';
 
 export function PlayerPage() {
@@ -85,11 +86,14 @@ export function PlayerPage() {
 
         {!loading && (
           <div className="player-calendar-layout">
-            <Calendar
-              activeDates={activeDates}
-              selectedDate={selectedDate}
-              onSelect={setSelectedDate}
-            />
+            <div className="player-sidebar">
+              <Calendar
+                activeDates={activeDates}
+                selectedDate={selectedDate}
+                onSelect={setSelectedDate}
+              />
+              {latestSnapshot && <SkillsTab snapshot={latestSnapshot} />}
+            </div>
             {selectedDate ? (
               <DayDetail
                 date={selectedDate}
