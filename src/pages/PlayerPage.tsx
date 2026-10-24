@@ -7,6 +7,7 @@ import { Calendar } from '../components/Calendar';
 import { DayDetail } from '../components/DayDetail';
 import { PlayerOverview } from '../components/PlayerOverview';
 import { SkillsTab } from '../components/SkillsTab';
+import { LootLedger } from '../components/LootLedger';
 import type { PlayerDayEntry } from '../utils/diary';
 
 export function PlayerPage() {
@@ -52,6 +53,11 @@ export function PlayerPage() {
       return d.playerName === playerName && ts?.slice(0, 10) === selectedDate;
     });
   }, [drops, selectedDate, playerName]);
+
+  const playerDrops = useMemo(
+    () => drops.filter((d) => d.playerName === playerName),
+    [drops, playerName],
+  );
 
   if (!loading && playerName && !PLAYERS.includes(playerName as (typeof PLAYERS)[number])) {
     return <Navigate to="/" replace />;
@@ -107,6 +113,8 @@ export function PlayerPage() {
             )}
           </div>
         )}
+
+        {!loading && <LootLedger drops={playerDrops} snapshot={latestSnapshot} />}
       </main>
     </div>
   );

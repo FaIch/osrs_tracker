@@ -1110,6 +1110,164 @@
   border: 1px solid var(--border-lo);
 }
 
+/* ── Loot ledger ─────────────────────────────────────── */
+.loot-ledger {
+  margin-top: 14px;
+  background: var(--panel);
+  border: 2px solid var(--border-hi);
+}
+
+.loot-ledger-header {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border-lo);
+}
+
+.loot-ledger-title {
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.5px;
+}
+
+.loot-ledger-sub,
+.loot-source-sub {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+}
+
+.loot-ledger-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 10px 14px 12px;
+}
+
+.loot-column {
+  min-width: 0;
+}
+
+.loot-section-label {
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 6px;
+}
+
+.loot-empty {
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 0.82rem;
+  padding: 16px 14px;
+}
+
+.loot-source {
+  border: 1px solid var(--border-lo);
+  margin-bottom: 4px;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.loot-source.open {
+  border-color: var(--border-hi);
+}
+
+.loot-source-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 5px 8px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.loot-source-header:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.loot-source-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  image-rendering: pixelated;
+  object-fit: contain;
+}
+
+.loot-source-info,
+.luck-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.loot-source-name,
+.luck-item {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.loot-source-best {
+  display: flex;
+}
+
+.loot-source-value {
+  font-weight: bold;
+  min-width: 44px;
+  text-align: right;
+}
+
+.loot-source-caret {
+  color: var(--text-dim);
+  width: 10px;
+}
+
+.loot-source-drops {
+  border-top: 1px solid var(--border-lo);
+}
+
+.luck-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  font-size: 0.82rem;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid var(--border-lo);
+}
+
+.luck-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.luck-badge {
+  flex-shrink: 0;
+  font-family: 'VT323', monospace;
+  font-size: 1rem;
+  padding: 0 8px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  cursor: help;
+}
+
+.luck-spooned  { color: var(--xp); }
+.luck-on-rate  { color: var(--text); }
+.luck-dry      { color: var(--gold); }
+.luck-very-dry { color: var(--error); }
+
 /* ── Calendar ────────────────────────────────────────── */
 .player-calendar-layout {
   display: grid;
@@ -1350,4 +1508,5 @@
   .home-bottom { grid-template-columns: 1fr; }
   .home-bottom > section:last-child { order: -1; }
   .player-calendar-layout { grid-template-columns: 1fr; }
+  .loot-ledger-body { grid-template-columns: 1fr; }
 }
